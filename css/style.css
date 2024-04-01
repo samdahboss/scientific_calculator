@@ -1,0 +1,65 @@
+body{
+    width: 100vw;
+    height: 100vh;
+    background-color: #ecf0f3 !important;
+    user-select: none;
+}
+#calculator{
+    width: 90%;
+    max-width: 500px;
+    background-color: #ecf0f3;
+    box-shadow: 12px 12px 20px #cbced1,
+                -12px -12px 20px #fff;
+    margin: 100px auto 0px;
+    padding: 20px;
+}
+#calc-screen{
+    width: 100%;
+    height: 80px;
+    background-color: #ecf0f3;
+    box-shadow: 8px 8px 10px #cbced1 inset,
+                -4px -4px 10px #fff inset;
+    font-size: 24px;
+    font-weight: 600;
+    text-align: right;
+    padding: 1em 0.5em;
+    /* overflow-x: scroll;
+    overflow-y: hidden; */
+}
+#keys{
+    display: grid;
+    grid-template-columns: repeat(6,1fr);
+    gap: 10px;
+    padding: 2em 1em;
+}
+button{
+    height: 2.5em;
+    background-color: #ecf0f3;
+    box-shadow: 4px 4px 10px #cbced1,
+                -4px -4px 10px #fff;
+    outline: none;
+    border: none ;
+    border-radius: 5px !important;
+}
+#on-off,#ac,#equal-to{
+    color: white;
+}
+#on-off{
+    background-color: rgb(255, 0, 119);
+}
+#ac{
+    background-color: rgb(28, 191, 28);
+}
+#equal-to{
+    background-color: rgb(1, 149, 241);
+}
+#equal-to:hover:not(:disabled){
+    background-color: rgb(28, 191, 28);
+}
+
+button:hover:not(:disabled){
+    background-color: #fff;
+}
+.disable-btn:hover{
+    cursor: no-drop;
+}
