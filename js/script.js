@@ -1,65 +1,67 @@
-const calcScreen = document.getElementById('calc-screen')
-const allBtns= document.querySelector("button")
-const keys=document.getElementById('keys')
+const calcScreen = document.getElementById('calculator-screen')
+const calculatorKeys=document.getElementById('calculator-keys')
 const key=document.getElementsByClassName('key')
 
-keys.innerHTML=""
-class button{
-    constructor(content,id){
+
+const BUTTON_TYPES ={
+    ON_OFF: "on-off",
+    EQUAL_TO : "equal-to"
+}
+class Button{
+    constructor(content,id, parentElement){
         this.content=content;
         this.id= id
-        this.create()
+        this.parentElement =parentElement;
+        this.buttonElement = this.create()
     }
+
     create(){
-        let button =document.createElement('button');
+        const button =document.createElement('button');
         button.innerHTML=this.content;
         button.id=this.id;
-        button.className="key"
-        keys.appendChild(button)
-        button.addEventListener('click',()=>{
-            if(this.id == "ac"){
+        button.classList.add("key")
+        button.addEventListener('click' , this.handleClick)
+        this.parentElement.appendChild(button)
+        return button
+    }
+
+    handleClick = () => {
+        switch (this.id){
+            case BUTTON_TYPES.ON_OFF:
+                this.toggleButtonsState()
                 calcScreen.innerHTML=""
-            }else if(this.id == "on-off"){
-                for(let index=1; index<key.length; index++){
-                    key[index].toggleAttribute("disabled")
-                    key[index].classList.toggle("disable-btn")
-                }
-                calcScreen.innerHTML=""
-            }else if(this.id=="equal-to"){
+                break;
+            case BUTTON_TYPES.EQUAL_TO:
                 this.equalTo()
-            }else if(this.id == "factorial"){
-                calcScreen.innerHTML+="!"
-            }else if(this.id == "cos" || this.id== "tan" || this.id == "sin" || this.id =="log"){
-                calcScreen.innerHTML+=button.innerHTML+"(";
-            }else if(this.id == "pwr"){
-                calcScreen.innerHTML+="&#xb2";
-            }else{
-                calcScreen.innerHTML+=button.innerHTML;
-            }
-        })
+                break;
+            default:
+                calcScreen.innerHTML+=this.buttonElement.innerHTML;
+        }
+    }
+
+    toggleButtonsState() {
+        for (let index = 0; index < key.length; index++) {
+            if (index === 3) continue;
+            key[index].toggleAttribute("disabled");
+            key[index].classList.toggle("disable-btn");
+        }
+    }
+
+    equalTo(){
+        let calculation = calcScreen.innerHTML.replace(/x/g,"*").replace(/÷/g,"/")
+        if(typeof eval(calculation) !== "number"){
+            calcScreen.innerHTML="SYNTAX ERROR"
+        }else{
+            calcScreen.innerHTML= eval(calculation);
+        }
     }
 }
 
-button.prototype.equalTo = function(){
-    let calculation = calcScreen.innerHTML
-    calculation = calculation.replace(/x/g,"*")
-    calculation = calculation.replace(/÷/g,"/")
-    if(typeof eval(calculation) !== "number"){
-        calcScreen.innerHTML="SYNTAX ERROR"
-    }else{
-        calcScreen.innerHTML= eval(calculation);
-    }
-}
-
-let allBtn = [["ON/OFF","on-off"],["x!","factorial"],["(","opening-parentheses"],
-              [")","closing-parentheses"],["%","mod"],["AC","ac"],["sin","sin"],
-              ["π","pi"],["7","7"],["8","8"],["9","9"],["÷","divide"],["cos","cos"],
-              ["log","log"],["4","4"],["5","5"],["6","6"],["x","multiply"],["tan","tan"],
-              ["√","root"],["1","1"],["2","2"],["3","3"],["-","subtract"],["e","exp"],
-              ["x&#xb2","pwr"],["0","0"],[".","pnt"],["=","equal-to"],["+","add"],
+let allBtn = [
+                ["7","7"],["8","8"],["9","9"],["ON/OFF","on-off"],
+                ["4","4"],["5","5"],["6","6"],["÷","divide"],
+                ["1","1"],["2","2"],["3","3"],["-","subtract"],
+                ["0","0"],["*","multiply"],["+","add"],["=","equal-to"],
              ]
 
-let btnObject=[]
-for (let index = 0; index < allBtn.length; index++) {
-    btnObject.push(new button(allBtn[index][0], allBtn[index][1]))    
-}
+const buttonInstance = allBtn.map(([content, id]) => new Button (content, id, calculatorKeys))
